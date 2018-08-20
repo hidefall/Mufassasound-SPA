@@ -122,15 +122,15 @@ add_action( 'widgets_init', 'mufassa_sound_widgets_init' );
 function mufassa_sound_scripts() {
 	wp_enqueue_style( 'mufassa-sound-style', get_stylesheet_uri() );
 
-	wp_enqueue_style( 'app-style',  get_template_directory_uri() . '/dist/css/app.96e8b40c.css' );
+	wp_enqueue_style( 'app-style',  get_template_directory_uri() . '/dist/css/app.css' );
 
-	wp_enqueue_style( 'chunk-vendor-style',  get_template_directory_uri() . '/dist/css/chunk-vendors.0fabc8cd.css' );
+	wp_enqueue_style( 'chunk-vendor-style',  get_template_directory_uri() . '/dist/css/chunk-vendors.css' );
 
 	wp_enqueue_script( 'mufassa-sound-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
 
 	wp_enqueue_script( 'waves-js', 'https://cdnjs.cloudflare.com/ajax/libs/node-waves/0.7.6/waves.min.js', array(), '0.7.6', true );
 
-	wp_enqueue_script( 'app', get_template_directory_uri() . '/dist/js/app.78dfeb6d.js', array(), null, true );
+	wp_enqueue_script( 'app', get_template_directory_uri() . '/dist/js/app.js', array(), null, true );
 
 	function generatePages(){
 		// WP_Query arguments
@@ -166,7 +166,7 @@ function mufassa_sound_scripts() {
 	
 	wp_localize_script( 'app', 'pages', generatePages() );
 
-	wp_enqueue_script( 'chunk-vendors', get_template_directory_uri() . '/dist/js/chunk-vendors.54f55195.js', array('app'), null, true );
+	wp_enqueue_script( 'chunk-vendors', get_template_directory_uri() . '/dist/js/chunk-vendors.js', array('app'), null, true );
 
 	wp_enqueue_script( 'mufassa-sound-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
 
@@ -175,7 +175,11 @@ function mufassa_sound_scripts() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'mufassa_sound_scripts' );
-
+if( function_exists('acf_add_options_page') ) {
+	
+	acf_add_options_page();
+	
+}
 /**
  * Implement the Custom Header feature.
  */
@@ -202,4 +206,5 @@ require get_template_directory() . '/inc/customizer.php';
 if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
-
+add_filter( 'acf/rest_api/field_settings/show_in_rest', '__return_true' );
+add_filter( 'acf/rest_api/field_settings/edit_in_rest', '__return_true' );

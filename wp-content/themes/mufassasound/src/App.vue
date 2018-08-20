@@ -46,15 +46,11 @@
       </div>
       <div class="wrap">
         <header class="b_site_title">
-          <h1 class="title">{{ brand }}</h1>
+          <h1 class="title" v-if="acfFields">{{acfFields.sidebar_title}}</h1>
           <p class="sub_title">Designer & FrontEnd</p>
         </header>
         <div class="b_social">
-          <a href="#" class="link"></a>
-          <a href="#" class="link"></a>
-          <a href="#" class="link"></a>
-          <a href="#" class="link"></a>
-          <a href="#" class="link"></a>
+          <a v-bind:href="social.link" v-bind:class="'link fa ' + 'fa-'+ social.social_name" v-for="social in socials"></a>
         </div>
       </div>
       <p class="b_paragraph">
@@ -447,16 +443,16 @@
 </style>
 
 <script>
-
-
+let rootLink = window.apiRoot.acf
+let homePage = '/pages/7'
+  import axios from 'axios';
     export default {
         data() {
             return {
                 logo: require('./assets/logo.png'),
-                brand: 'Mr.Dart',
-                isActive: false
-
-
+                isActive: false,
+                acfFields: null,
+                socials: null
             };
         },
         methods: {
@@ -464,6 +460,15 @@
                 this.isActive = !this.isActive;
                 // some code to filter users
             }
+        },
+        mounted(){
+          axios.get(`${rootLink}${homePage}`).then((response) => {
+          this.acfFields = response.data.acf
+        })
+         axios.get(`${rootLink}/options/options/social_links`).then((response) => {
+          this.socials = response.data.social_links
+          console.log(this.socials)
+        })
         }
     }
 

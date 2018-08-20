@@ -12,6 +12,6 @@
 ?>
 
 <?php wp_footer(); ?>
-
+<script src="https://use.fontawesome.com/f55b5288da.js"></script>
 </body>
 </html>

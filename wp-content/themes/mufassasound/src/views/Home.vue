@@ -4,25 +4,30 @@
     <div class="color_wrapper">
       <div class="b_square">
         <carousel :loop="true" :perPage="1" :navigationEnabled="true" :paginationEnabled="false" :autoplay="true" :autoplayTimeout="5000">
-          <slide>
+          <slide v-for="slide in slides">
             <div class="slide">
-              <h3 class="sup_title">Welcom to Mr.Dat's Portfolio </h3>
+              <h3 class="sup_title">{{slide.slide_subtitle}}</h3>
+              <h2 class="title" v-if="acfFields">{{slide.slide_title}}</h2>
+              <p class="sub_title">{{slide.slide_description}}</p>
+            </div>
+          </slide>
+          <!-- <slide>
+            <div class="slide">
+              <h3 class="sup_title"></h3>
               <h2 class="title" v-if="acfFields">{{acfFields.home_page_title}}</h2>
               <p class="sub_title">My name is Dat Nguyen Van . I’m a UX/UI Web Designer.</p>
             </div>
-          </slide>
-          <slide>
+          </slide> -->
+          <!-- <slide>
             <div class="slide">
               <h3 class="sup_title">Welcom to Mr.Dat's Portfolio </h3>
               <h2 class="title">Hello World!</h2>
               <p class="sub_title">My name is Dat Nguyen Van . I’m a UX/UI Web Designer.</p>
             </div>
-          </slide>
+          </slide> -->
         </carousel>
       </div>
     </div>
-
-
   </div>
 </template>
 <style lang="sass">
@@ -111,7 +116,7 @@
     bottom: 0
   .sup_title
     margin: 0
-    font-family: 'Playfair Display', sans-serif
+    font-family: sans-serif
     +fluidFontSize(21px, 25px, 992px, 1280px)
     +fluidFontSize(16px, 21px, 320px, 700px)
     font-style: italic
@@ -142,7 +147,8 @@
     export default {
       data(){
         return {
-          acfFields: null
+          acfFields: null,
+          slides: null,
         }
       },
       components: {
@@ -152,7 +158,8 @@
       mounted(){
         axios.get(`${window.apiRoot.acf}/pages/7`).then((response) => {
           this.acfFields = response.data.acf
-          console.log(this.acfFields)
+          this.slides = response.data.acf.slide
+          console.log(this.slides)
         })
       }
     };
