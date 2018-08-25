@@ -1,7 +1,10 @@
 module.exports = {
+  filenameHashing: false,
   chainWebpack: config => {
     if (config.plugins.has("extract-css")) {
       const extractCSSPlugin = config.plugin("extract-css");
+      // config.optimization.splitChunks(false);
+
       extractCSSPlugin &&
         extractCSSPlugin.tap(() => [
           {

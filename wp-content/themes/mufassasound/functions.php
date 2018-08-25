@@ -164,8 +164,46 @@ function mufassa_sound_scripts() {
 		return $localize;
 	};
 	
-	wp_localize_script( 'app', 'pages', generatePages() );
+	// Get Portfolio PostType
+	function getPortfolio(){
+		// WP_Query arguments
+		$args = array(
+			'post_type'              => array( 'portfolio' ),
+			'post_status'            => array( 'publish' ),
+			'nopaging'               => true,
+		);
 
+		$localize_portfolio = array();
+
+		// The Query
+		$query = new WP_Query( $args );
+
+		// The Loop
+		if ( $query->have_posts() ) {
+			while ( $query->have_posts() ) {
+				$query->the_post();
+				
+				array_push($localize_portfolio, array(
+					'id' => get_the_ID(),
+					'title' => get_the_title()
+				)) ;
+			}
+		} else {
+			// no posts found
+		}
+
+		// Restore original Post Data
+		wp_reset_postdata();
+		return $localize_portfolio;
+	};
+	/*
+		Localize JS Variables
+	*/
+
+	wp_localize_script( 'app', 'pages', generatePages() );
+	wp_localize_script( 'app', 'portfolio', getPortfolio() );
+	
+	// Setting scripts 
 	wp_enqueue_script( 'chunk-vendors', get_template_directory_uri() . '/dist/js/chunk-vendors.js', array('app'), null, true );
 
 	wp_enqueue_script( 'mufassa-sound-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );

@@ -1,8 +1,7 @@
 <template>
   <div class="l_about">
 
-    <div class="color_wrapper">
-      <div class="b_square">
+    <div class="b_square">
         <carousel :loop="true" :perPage="1" :navigationEnabled="true" :paginationEnabled="false" :autoplay="true" :autoplayTimeout="5000">
           <slide v-for="slide in slides">
             <div class="slide">
@@ -11,23 +10,10 @@
               <p class="sub_title">{{slide.slide_description}}</p>
             </div>
           </slide>
-          <!-- <slide>
-            <div class="slide">
-              <h3 class="sup_title"></h3>
-              <h2 class="title" v-if="acfFields">{{acfFields.home_page_title}}</h2>
-              <p class="sub_title">My name is Dat Nguyen Van . I’m a UX/UI Web Designer.</p>
-            </div>
-          </slide> -->
-          <!-- <slide>
-            <div class="slide">
-              <h3 class="sup_title">Welcom to Mr.Dat's Portfolio </h3>
-              <h2 class="title">Hello World!</h2>
-              <p class="sub_title">My name is Dat Nguyen Van . I’m a UX/UI Web Designer.</p>
-            </div>
-          </slide> -->
         </carousel>
       </div>
-    </div>
+
+
   </div>
 </template>
 <style lang="sass">
@@ -38,18 +24,23 @@
   position: relative
   height: 100%
   min-height: 100vh
+  background: $nav_bg url("../assets/main_bg.jpg") center center no-repeat
+  background-size: cover
+
   @media (max-width: 992px)
     padding-top: 50px
 
   &:before
     content: ''
     position: absolute
-    right: 0
-    bottom: 0
     top: 0
+    right: 0
     left: 0
-    background-color: rebeccapurple
-    z-index: -10
+    bottom: 0
+    height: 100%
+    width: 100%
+    background-color: rgba($black, 0.75)
+
 
   &:after
 
@@ -73,12 +64,9 @@
       min-height: 0
       min-width: 0
       width: 80%
+      height: 80%
 
-.color_wrapper
-  position: absolute
-  height: 100%
-  width: 100%
-  background-color: rgba($black, 0.75)
+
 .b_square
 
   position: absolute
@@ -88,6 +76,8 @@
   left: calc(50% + 50px)
   transform: translate(-50%,-50%)
   z-index: 1
+  @media (max-width: 992px)
+    transform: translate(-50%, calc(-50% + 25px))
 
   @media (max-width: 800px)
     left: 50%
@@ -116,7 +106,7 @@
     bottom: 0
   .sup_title
     margin: 0
-    font-family: sans-serif
+    font-family: 'Playfair Display', sans-serif
     +fluidFontSize(21px, 25px, 992px, 1280px)
     +fluidFontSize(16px, 21px, 320px, 700px)
     font-style: italic
@@ -131,6 +121,7 @@
   .sub_title
     margin: 0
     font-size: 30px
+    line-height: 36px
     +fluidFontSize(26px, 30px, 992px, 1280px)
     +fluidFontSize(18px, 25px, 320px, 700px)
 
@@ -143,7 +134,6 @@
 <script>
     import { Carousel, Slide } from 'vue-carousel';
     import axios from 'axios';
-
     export default {
       data(){
         return {
@@ -153,7 +143,7 @@
       },
       components: {
             Carousel,
-            Slide
+            Slide,
       },
       mounted(){
         axios.get(`${window.apiRoot.acf}/pages/7`).then((response) => {

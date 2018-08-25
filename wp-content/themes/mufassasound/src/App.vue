@@ -8,25 +8,25 @@
   </div>
   <div class="wrapper" v-on:click= "myFilter" v-bind:class="{ active: isActive }">
     <nav class="b_nav">
-      <router-link  class="link" to="/">
+      <router-link  class="link waves-effect waves-button waves-float" to="/">
         <svg class="icon">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#nav_home"></use>
         </svg>
         <span class="title">Home</span>
       </router-link>
-      <router-link class="link" to="/about">
+      <router-link class="link waves-effect waves-button waves-float" to="/about">
         <svg class="icon">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#nav_about"></use>
         </svg>
         <span class="title">About</span>
       </router-link>
-      <router-link class="link" to="/portfolio">
+      <router-link class="link waves-effect waves-button waves-float" to="/portfolio">
         <svg class="icon">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#nav_portfolio"></use>
         </svg>
         <span class="title">Portfolio</span>
       </router-link>
-      <router-link class="link" to="/contact">
+      <router-link class="link waves-effect waves-button waves-float" to="/contact">
         <svg class="icon">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#nav_contact"></use>
         </svg>
@@ -47,20 +47,16 @@
       <div class="wrap">
         <header class="b_site_title">
           <h1 class="title" v-if="acfFields">{{acfFields.sidebar_title}}</h1>
-          <p class="sub_title">Designer & FrontEnd</p>
+          <p class="sub_title" v-if="acfFields">{{acfFields.sidebar_role}}</p>
         </header>
         <div class="b_social">
-          <a v-bind:href="social.link" v-bind:class="'link fa ' + 'fa-'+ social.social_name" v-for="social in socials"></a>
+          <a v-bind:href="social.link" v-bind:class="'link fa ' + 'fa-'+ social.social_name" v-for="social in socials" target="_blank"></a>
         </div>
       </div>
-      <p class="b_paragraph">
-        Hello. I am a professional about 27 years. Have a long experience in Web design, PSD to HTML, Poster, Logo, Business card, Cover-design, Photo editing, Illustration others printing elements with Photoshop, Illustrator, HTML, Css, JavaScript.
-      </p>
+      <p class="b_paragraph" v-if="acfFields">{{acfFields.sidebar_about_me}}</p>
       <button class="b_dl_button">Download My CV</button>
     </div>
-    <footer class="b_copywrite">
-      © Mr.Dat 2018 . All rights reserved.
-    </footer>
+    <footer class="b_copywrite" v-if="copyright">{{copyright}}</footer>
 
   </article>
   <main id="main">
@@ -83,7 +79,7 @@
     position: relative
     max-width: 100px
     min-height: 100vh
-    background-color: $nav_bg
+
     flex: 1 100px
     transition: transform .25s ease-in
     z-index: 1
@@ -145,8 +141,9 @@
     flex-flow: column wrap
     height: 100px
     text-align: center
-    border-bottom: $hr_color 1px solid
     color: $nav_font_color
+
+    border-bottom: $hr_color 1px solid
     @media (max-width: 992px)
       height: 75px
 
@@ -182,7 +179,7 @@
     min-height: 50px
     height: 50px
     flex-basis: auto
-    z-index: 1
+    z-index: 3
     background-color: $black
   @media (max-width: 720px)
     transform: translateX(0px)
@@ -290,10 +287,10 @@
 
 .b_social
   padding-top: 9px
-  font-size: 0
+  font-size: 25px
   text-align: center
   display: flex
-  justify-content: space-around
+  justify-content: center
   margin: 0 auto
   max-width: 200px
 
@@ -302,6 +299,9 @@
     display: none
 
   .link
+    display: flex
+    justify-content: center
+    flex-direction: column
     width: 33px
     height: 33px
     color: $secondary_color
@@ -358,10 +358,10 @@
 
 .b_hamburger
   display: none
-  position: absolute
+  position: fixed
   top: 13px
   right: 10px
-  z-index: 2
+  z-index: 4
   cursor: pointer
   transition-property: opacity, filter
   transition-duration: 0.15s
@@ -373,7 +373,7 @@
   border: 0
   margin: 0
   overflow: visible
-  @media (max-width: 992px)
+  @media (max-width: 720px)
     display: inline-block
   &:hover
     opacity: 0.7
@@ -449,10 +449,11 @@ let homePage = '/pages/7'
     export default {
         data() {
             return {
-                logo: require('./assets/logo.png'),
+                // logo: require('./assets/logo.png'),
                 isActive: false,
                 acfFields: null,
-                socials: null
+                socials: null,
+                copyright: null,
             };
         },
         methods: {
@@ -462,18 +463,13 @@ let homePage = '/pages/7'
             }
         },
         mounted(){
-          axios.get(`${rootLink}${homePage}`).then((response) => {
+          axios.get(`${rootLink}/options/options`).then((response) => {
           this.acfFields = response.data.acf
-        })
-         axios.get(`${rootLink}/options/options/social_links`).then((response) => {
-          this.socials = response.data.social_links
-          console.log(this.socials)
+          this.copyright = response.data.acf.copyright
+          this.socials = response.data.acf.social_links
+          // console.log(this.acfFields)
         })
         }
     }
-
-
-
-
 </script>
 
