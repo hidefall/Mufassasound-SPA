@@ -28,7 +28,8 @@ export default new Router({
         {
           path: "post/:id",
           name: "post",
-          component: Post
+          component: Post,
+          props: router => ({ id: parseInt(router.params.id) })
         }
       ]
     },

@@ -12,7 +12,7 @@
         <svg class="icon">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#nav_home"></use>
         </svg>
-        <span class="title">Home</span>
+        <span class="title">Home {{ locale }}</span>
       </router-link>
       <router-link class="link waves-effect waves-button waves-float" to="/about">
         <svg class="icon">
@@ -52,11 +52,12 @@
         <div class="b_social">
           <a v-bind:href="social.link" v-bind:class="'link fa ' + 'fa-'+ social.social_name" v-for="social in socials" target="_blank"></a>
         </div>
+        <button v-on:click="swtichLocale()">{{ otherLocale }}</button>
       </div>
       <p class="b_paragraph" v-if="acfFields">{{acfFields.sidebar_about_me}}</p>
       <button class="b_dl_button">Download My CV</button>
     </div>
-    <footer class="b_copywrite" v-if="copyright">{{copyright}}</footer>
+    <footer class="b_copywrite" v-if="copyright">{{ ml_copyright }}</footer>
 
   </article>
   <main id="main">
@@ -446,6 +447,9 @@
 let rootLink = window.apiRoot.acf
 let homePage = '/pages/7'
   import axios from 'axios';
+  import {mapGetters} from 'vuex'
+  // import VueI18n from "vue-i18n";
+  // import messages from "./data";
     export default {
         data() {
             return {
@@ -453,21 +457,32 @@ let homePage = '/pages/7'
                 isActive: false,
                 acfFields: null,
                 socials: null,
-                copyright: null,
+                copyright: {
+                  en: null,
+                  ru: null
+                },
+                copyright_eng: null,
             };
         },
         methods: {
             myFilter: function(){
                 this.isActive = !this.isActive;
                 // some code to filter users
-            }
-        },
-        mounted(){
+            },
+          },
+        computed: {
+          ml_copyright() {
+            return this.isEn ? this.copyright.en : this.copyright.ru
+          }
+  },
+        created(){
           axios.get(`${rootLink}/options/options`).then((response) => {
           this.acfFields = response.data.acf
-          this.copyright = response.data.acf.copyright
+          this.copyright.en = this.acfFields.copyright
+          this.copyright.ru = this.acfFields.copyright_ru
           this.socials = response.data.acf.social_links
-          // console.log(this.acfFields)
+          console.log(this.$i18n)
+          console.log(this.locale)
         })
         }
     }

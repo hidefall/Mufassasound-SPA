@@ -6,18 +6,57 @@
 			<h3 class="title">My portfolio</h3>
 		</header>
 		<div class="l_posts " :class="{no_scroll: route }">
-		<div class="l_works">
-			<router-link v-for="(portfolio, index) in portfolios" tag="a" class="b_work" v-bind:style="{ backgroundImage: 'url(' + portfolio.acf.preview_image.url + ')' }" :to="{ name: 'post', params: { id: index + 1 } }">
-				<a href="#" class="view fa fa-eye"></a>
-				<a href="#" class="share fa fa-link"></a>
-			</router-link>
+			<div class="l_works">
+				<div @click="$router.push({ name: 'post', params: { id: portfolio.id } })" 
+					v-for="(portfolio, index) in portfolios" 
+					:key="index"
+					class="b_work" 
+					v-bind:style="{ backgroundImage: 'url(' + portfolio.acf.preview_image.url + ')' }">
+					<a href="#" class="view fa fa-eye"></a>
+					<a href="#" class="share fa fa-link"></a>
+				</div>
+			</div>
 
-		</div>
 			<router-view></router-view>
 		</div>
 	</div>
 
 </template>
+
+<script>
+let rootLink = window.apiRoot.acf
+let portfolioUrl = '/portfolio'
+import axios from 'axios';
+
+    export default {
+        data() {
+            return {
+                image: '<%= BASE_URL %>/assets/item01.jpg',
+                postActive: false,
+				acfFields: null,
+          		portfolios: null,
+            };
+        },
+        computed: {
+            route: function postStyle() {
+
+                if (this.$route.path === "/portfolio") {
+                    return false
+                } else  {
+                    return true
+
+                }
+
+            }
+		},
+		mounted(){
+        axios.get(`${rootLink}${portfolioUrl}`).then((response) => {
+          this.acfFields = response.data.acf
+          this.portfolios = response.data
+        })
+      }
+    }
+</script>
 
 <style lang="sass" >
 @import "../styles/variables"
@@ -177,41 +216,3 @@
 
 
 </style>
-
-<script>
-let rootLink = window.apiRoot.acf
-let portfolioUrl = '/portfolio'
-import axios from 'axios';
-    export default {
-        data() {
-            return {
-                image: '<%= BASE_URL %>/assets/item01.jpg',
-                postActive: false,
-				acfFields: null,
-          		portfolios: null,
-            };
-        },
-
-        computed: {
-            route: function postStyle() {
-
-                if (this.$route.path === "/portfolio") {
-                    return false
-                } else  {
-                    return true
-
-                }
-
-            }
-		},
-		mounted(){
-        axios.get(`${rootLink}${portfolioUrl}`).then((response) => {
-          this.acfFields = response.data.acf
-          this.portfolios = response.data
-		//   console.log(this.portfolios)
-		  console.log(this.acfFields)
-
-        })
-      }
-    }
-</script>

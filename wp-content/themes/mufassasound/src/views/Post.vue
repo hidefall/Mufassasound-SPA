@@ -5,12 +5,12 @@
       Загрузка...
     </div>
 	<div class="b_video">
-		<iframe v-if="video_link" v-bind:src="video_link" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+		<iframe  v-bind:src="acf.video_link" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 	</div>
 		<div class="l_post_info">
-			<h4 class="title" v-if="title">{{ title }}</h4>
-			<p class="sub_title" v-if="sub_title">{{ sub_title }}</p>
-			<p class="description" v-if="description">{{ description }}</p>
+			<h4 class="title" >{{ ml_title }}</h4>
+			<p class="sub_title" >{{ ml_sub_title }}</p>
+			<p class="description" >{{ ml_description }}</p>
 		</div>
 	</div>
 </template>
@@ -32,44 +32,47 @@
 
 <script>
 let rootLink = window.apiRoot.acf
-let portfolioUrl = '/portfolio'
+let portfolioUrl = '/portfolio/'
 import axios from 'axios';
     export default {
+
+		props: ['id'],
+
         data() {
             return {
                 postActive: false,
-				acfFields: null,
-				  portfolios: null,
-				  post: null,
-				  video_link: null,
-				  title: null,
-				  sub_title: null,
-				  description: null,
-				  loading: false,
+				loading: false,
+				acf: {},
             };
 		},
-		mounted(){
-			this.fetchData()
-		},
+		
 		watch: {
 			'$route': 'fetchData'
 		},
+		 computed: {
+          ml_title() {
+            return this.isEn ? this.acf.title : this.acf.title_ru
+		  },
+		  ml_sub_title() {
+            return this.isEn ? this.acf.sub_title : this.acf.sub_title_ru
+		  },
+		  ml_description() {
+            return this.isEn ? this.acf.description : this.acf.description_ru
+          }
+  			},
 		methods: {
 			fetchData () {
       			this.loading = true
       			// замените `getPost` используемым методом получения данных / доступа к API
-     			axios.get(`${rootLink}${portfolioUrl}`).then((response) => {
+     			axios.get(`${rootLink}/portfolio/${this.id}`).then((response) => {
+					this.acf = response.data.acf
 					this.loading = false
-		  			this.portfolios = response.data
-		  			let postId = this.$route.params.id
-		  			postId -= 1
-		  			this.post = this.portfolios[postId].acf
-		  			this.video_link = this.post.video_link
-		  			this.title = this.post.title
-		  			this.sub_title = this.post.sub_title
-		  			this.description = this.post.description
+		
         })
     }
 },
+mounted(){
+			this.fetchData()
+		},
 }
 </script>

@@ -5,9 +5,12 @@
         <carousel :loop="true" :perPage="1" :navigationEnabled="true" :paginationEnabled="false" :autoplay="true" :autoplayTimeout="5000">
           <slide v-for="slide in slides">
             <div class="slide">
-              <h3 class="sup_title">{{slide.slide_subtitle}}</h3>
-              <h2 class="title" v-if="acfFields">{{slide.slide_title}}</h2>
-              <p class="sub_title">{{slide.slide_description}}</p>
+              <h3 class="sup_title" v-if="isEn">{{slide.slide_subtitle_eng}}</h3>
+              <h3 class="sup_title" v-if="isRu">{{slide.slide_subtitle}}</h3>
+              <h2 class="title" v-if="isEn">{{slide.slide_title_eng}}</h2>
+              <h2 class="title" v-if="isRu">{{slide.slide_title}}</h2>
+              <p class="sub_title" v-if="isEn">{{slide.slide_description_eng}}</p>
+              <p class="sub_title" v-if="isRu">{{slide.slide_description}}</p>
             </div>
           </slide>
         </carousel>
@@ -134,6 +137,7 @@
 <script>
     import { Carousel, Slide } from 'vue-carousel';
     import axios from 'axios';
+    import i18n from '../data';
     export default {
       data(){
         return {
@@ -145,6 +149,11 @@
             Carousel,
             Slide,
       },
+      // computed: {
+      //    ml_title() {
+      //       return this.isEn ? '_eng' : ''
+		  // },
+      // },
       mounted(){
         axios.get(`${window.apiRoot.acf}/pages/7`).then((response) => {
           this.acfFields = response.data.acf
