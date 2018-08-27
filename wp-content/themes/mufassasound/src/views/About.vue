@@ -3,9 +3,9 @@
   <div class="main_wrap">
     <div class="b_square">
             <div class="slide">
-              <h3 class="sup_title m_sup_about" v-if="title">{{ title }}</h3>
-              <h2 class="title m_title_about" v-if="subTitle">{{ subTitle }}</h2>
-              <p class="sub_title m_sub_about" v-if="description">{{ description }}</p>
+              <h3 class="sup_title m_sup_about" v-if="acfFields">{{ ml.title }}</h3>
+              <h2 class="title m_title_about" v-if="acfFields">{{ ml.sub_title }}</h2>
+              <p class="sub_title m_sub_about" v-if="acfFields">{{ ml.description }}</p>
             </div>
 
       </div>
@@ -14,7 +14,9 @@
       <div class="b_statistic">
           <div class="item" v-for="statistic in statistics">
             <p class="number" >{{ statistic.statistic_number }}</p>
-            <p class="title" >{{ statistic.statistic_text }}</p>
+            <p class="title" v-if="isEn">{{ statistic.statistic_text }}</p>
+            <p class="title" v-if="isRu">{{ statistic.statistic_text_ru }}</p>
+
           </div>
       </div>
 
@@ -135,15 +137,24 @@ let aboutPage = '/pages/37'
           title: null,
           subTitle: null,
           description: null,
+          acfFields: null,
           statistics: [],
         }
       },
+      computed: {
+          ml() {
+            
+            return {
+              title:  this.isEn ? this.acfFields.about_title : this.acfFields.about_title_ru,
+              sub_title:  this.isEn ? this.acfFields.about_sub_title : this.acfFields.about_sub_title_ru,
+              description:  this.isEn ? this.acfFields.about_description : this.acfFields.about_description_ru,
+            }
+        }
+  },
       mounted(){
         axios.get(`${window.apiRoot.acf}${aboutPage}`).then((response) => {
-          this.statistics = response.data.acf.statistics
-          this.title = response.data.acf.about_title
-          this.subTitle = response.data.acf.about_sub_title
-          this.description = response.data.acf.about_description
+          this.acfFields = response.data.acf
+          this.statistics = this.acfFields.statistics
         })
       }
     };

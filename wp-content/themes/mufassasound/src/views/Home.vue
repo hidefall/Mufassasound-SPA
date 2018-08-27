@@ -1,6 +1,5 @@
 <template>
   <div class="l_about">
-
     <div class="b_square">
         <carousel :loop="true" :perPage="1" :navigationEnabled="true" :paginationEnabled="false" :autoplay="true" :autoplayTimeout="5000">
           <slide v-for="slide in slides">
@@ -15,8 +14,6 @@
           </slide>
         </carousel>
       </div>
-
-
   </div>
 </template>
 <style lang="sass">
@@ -138,6 +135,7 @@
     import { Carousel, Slide } from 'vue-carousel';
     import axios from 'axios';
     import i18n from '../data';
+
     export default {
       data(){
         return {

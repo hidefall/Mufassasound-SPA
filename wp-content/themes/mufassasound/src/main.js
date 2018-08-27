@@ -6,7 +6,8 @@ import "./styles/main.sass";
 import VueCarousel from "vue-carousel";
 import "font-awesome/css/font-awesome.css";
 import Waves from "vue-directive-waves";
-import i18n from "./data";
+// import i18n from "./data";
+
 // import axios from 'axios';
 Vue.use(Waves);
 Vue.use(VueCarousel);
@@ -41,7 +42,6 @@ Vue.use({
 
 new Vue({
   store,
-  i18n,
   router,
   render: h => h(App)
 }).$mount("#app");

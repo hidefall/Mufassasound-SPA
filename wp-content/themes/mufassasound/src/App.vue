@@ -47,17 +47,17 @@
       <div class="wrap">
         <header class="b_site_title">
           <h1 class="title" v-if="acfFields">{{acfFields.sidebar_title}}</h1>
-          <p class="sub_title" v-if="acfFields">{{acfFields.sidebar_role}}</p>
+          <p class="sub_title" v-if="acfFields">{{ml.role}}</p>
         </header>
         <div class="b_social">
           <a v-bind:href="social.link" v-bind:class="'link fa ' + 'fa-'+ social.social_name" v-for="social in socials" target="_blank"></a>
         </div>
         <button v-on:click="swtichLocale()">{{ otherLocale }}</button>
       </div>
-      <p class="b_paragraph" v-if="acfFields">{{acfFields.sidebar_about_me}}</p>
+      <p class="b_paragraph" v-if="acfFields">{{ml.about_me}}</p>
       <button class="b_dl_button">Download My CV</button>
     </div>
-    <footer class="b_copywrite" v-if="copyright">{{ ml_copyright }}</footer>
+    <footer class="b_copywrite" v-if="acfFields">{{ ml.copyright }}</footer>
 
   </article>
   <main id="main">
@@ -457,11 +457,7 @@ let homePage = '/pages/7'
                 isActive: false,
                 acfFields: null,
                 socials: null,
-                copyright: {
-                  en: null,
-                  ru: null
-                },
-                copyright_eng: null,
+
             };
         },
         methods: {
@@ -471,18 +467,19 @@ let homePage = '/pages/7'
             },
           },
         computed: {
-          ml_copyright() {
-            return this.isEn ? this.copyright.en : this.copyright.ru
+          ml() {
+            
+            return {
+              copyright:  this.isEn ? this.acfFields.copyright : this.acfFields.copyright_ru,
+              role:  this.isEn ? this.acfFields.sidebar_role : this.acfFields.sidebar_role_ru,
+              about_me:  this.isEn ? this.acfFields.sidebar_about_me : this.acfFields.sidebar_about_me_ru,
+            }
           }
   },
         created(){
           axios.get(`${rootLink}/options/options`).then((response) => {
           this.acfFields = response.data.acf
-          this.copyright.en = this.acfFields.copyright
-          this.copyright.ru = this.acfFields.copyright_ru
-          this.socials = response.data.acf.social_links
-          console.log(this.$i18n)
-          console.log(this.locale)
+          this.socials = this.acfFields.social_links
         })
         }
     }
