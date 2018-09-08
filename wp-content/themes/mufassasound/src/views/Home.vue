@@ -1,5 +1,9 @@
 <template>
   <div class="l_about">
+    <video poster="https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/polina.jpg" id="bgvid" playsinline autoplay muted loop>
+      <!-- <source src="http://thenewcode.com/assets/videos/polina.webm" type="video/webm"> -->
+      <source src="http://localhost:8080/zimba/wp-content/uploads/2018/08/LOGO-MufassaSound_Loop.mp4" type="video/mp4">
+</video>
     <div class="b_square">
         <carousel :loop="true" :perPage="1" :navigationEnabled="true" :paginationEnabled="false" :autoplay="true" :autoplayTimeout="5000">
           <slide v-for="slide in slides">
@@ -18,7 +22,17 @@
 </template>
 <style lang="sass">
 @import "../styles/variables"
-
+video 
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translateX(-50%) translateY(-50%);
+  background-size: cover;
+  transition: 1s opacity;
 .l_about
   display: flex
   position: relative

@@ -14,8 +14,17 @@ export default new Vuex.Store({
     }
   },
 
+  actions: {
+    autoDetectLocale(ctx) {
+      ctx.commit(
+        "SET_LOCALE",
+        window.navigator.language === "en-US" ? "en" : "ru"
+      );
+    }
+  },
+
   mutations: {
-    LOCALE(state, locale) {
+    SET_LOCALE(state, locale) {
       state.locale = locale;
     }
   }

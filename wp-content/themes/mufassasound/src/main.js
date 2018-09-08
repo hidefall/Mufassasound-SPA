@@ -17,6 +17,8 @@ Vue.config.productionTip = false;
 Vue.config.devtools = true;
 Vue.config.debug = true;
 
+store.dispatch("autoDetectLocale");
+
 Vue.use({
   install(Vue) {
     Vue.mixin({
@@ -33,12 +35,16 @@ Vue.use({
       },
       methods: {
         swtichLocale() {
-          this.$store.commit("LOCALE", this.locale === "en" ? "ru" : "en");
+          this.$store.commit("SET_LOCALE", this.locale === "en" ? "ru" : "en");
         }
       }
     });
   }
 });
+
+var langSwitcher = document.querySelector(".ml_switcher");
+
+// var langSwitcherActive = (langSwitcher.className += " active");
 
 new Vue({
   store,

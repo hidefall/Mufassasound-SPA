@@ -52,7 +52,7 @@
         <div class="b_social">
           <a v-bind:href="social.link" v-bind:class="'link fa ' + 'fa-'+ social.social_name" v-for="social in socials" target="_blank"></a>
         </div>
-        <button v-on:click="swtichLocale()">{{ otherLocale }}</button>
+        <button  class="ml_switcher" v-on:click="swtichLocale()">{{ otherLocale }}<span class="ml_swticher_img"></span></button>
       </div>
       <p class="b_paragraph" v-if="acfFields">{{ml.about_me}}</p>
       <button class="b_dl_button">Download My CV</button>
@@ -73,7 +73,14 @@
 <style lang="sass">
 @import "styles/variables"
 
-
+.ml_switcher 
+  display: block
+  margin: 0 auto
+  top: 10px
+  position: absolute
+  right: 10px
+.ml_swticher_img
+  background-image: url("assets/eng.png")
 #app
   display: flex
   .wrapper
@@ -182,6 +189,7 @@
     flex-basis: auto
     z-index: 3
     background-color: $black
+    top: 0px
   @media (max-width: 720px)
     transform: translateX(0px)
 
@@ -465,6 +473,7 @@ let homePage = '/pages/7'
                 this.isActive = !this.isActive;
                 // some code to filter users
             },
+         
           },
         computed: {
           ml() {
